@@ -70,11 +70,11 @@ class AIDocument:
                                 if value.find('-') != 0 and value.find('-') != -1:
                                     value = '-' + value.replace('-', '')
                                 value = parse_decimal(value, locale=locale)
-                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
+                                result['pages'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
                             elif value_type == 'integer':
                                 if value.find('-') != 0 and value.find('-') != -1:
                                     value = '-' + value.replace('-', '')
-                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
+                                result['pages'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
                     continue
                 if field_data.get('content') is not None: 
                     value = field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('():', '').replace('hoogtarief,', '21')
@@ -82,11 +82,11 @@ class AIDocument:
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
                         value = parse_decimal(value, locale=locale)
-                        result['documents'][idx]['fields'][field_name]['value']  = Decimal(value)
+                        result['pages'][idx]['fields'][field_name]['value']  = Decimal(value)
                     elif value_type == 'integer':
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
-                        result['documents'][idx]['fields'][field_name]['value'] = int(value)
+                        result['pages'][idx]['fields'][field_name]['value'] = int(value)
         return result
 
     def parse_dates(self, result: dict):
@@ -102,11 +102,11 @@ class AIDocument:
                             value_type = nested_field_data.get('value_type')
                             value = nested_field_data.get('content')
                             if value_type == 'date':
-                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
+                                result['pages'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
-                    result['documents'][idx]['fields'][field_name]['value'] = parse(value).strftime(self.dateformat)
+                    result['pages'][idx]['fields'][field_name]['value'] = parse(value).strftime(self.dateformat)
         return result
 
     def extract_kv_pairs(self, result: dict):
