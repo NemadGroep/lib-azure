@@ -3,8 +3,7 @@ import json
 import pytest
 
 from decimal import Decimal
-from lib_azure.AIDocument import print_result, parse_numbers, parse_dates, extract_kv_pairs
-
+from lib_azure.AIDocument import AIDocument
 @pytest.fixture
 def result():
     result = os.getenv("RESULT")
@@ -18,15 +17,19 @@ def result():
 @pytest.fixture
 def locale():
     return "de_DE"
+
+@pytest.fixture
+def aidoc():
+    return AIDocument(endpoint="local-test", key="local-test")
     
-def test_print_result(result):
-    print_result(result)
+def test_print_result(aidoc, result):
+    aidoc.print_result(result)
 
-def test_processing_pipe(result, locale):
-    result_w_numbers = parse_numbers(result, locale)
-    result_w_numbers_n_dates = parse_dates(result_w_numbers)
+def test_processing_pipe(aidoc, result, locale):
+    result_w_numbers = aidoc.parse_numbers(result, locale)
+    result_w_numbers_n_dates = aidoc.parse_dates(result_w_numbers)
 
-    kv_pairs = extract_kv_pairs(result_w_numbers_n_dates)
+    kv_pairs = aidoc.extract_kv_pairs(result_w_numbers_n_dates)
     assert isinstance(kv_pairs, dict)
 
     date = kv_pairs.get("Invoice_date")
@@ -45,9 +48,3 @@ def test_processing_pipe(result, locale):
     qty = material_list_line.get("Quantity")
     assert isinstance(qty, Decimal)
     assert qty == Decimal("12.00")
-
-
-    
-    
-
-    
