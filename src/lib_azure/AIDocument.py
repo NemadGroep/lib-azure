@@ -18,8 +18,8 @@ class AIDocument:
 
     def print_result(self, result: dict):
         """Print the result of analyze_document in readable format"""
-        for document in result.get('documents'):
-            fields = document.get('fields', {})
+        for page in result.get('pages'):
+            fields = page.get('fields', {})
             for field_name, field_data in fields.items():
                 value_type = field_data.get('value_type')
                 value = field_data.get('value')
@@ -55,8 +55,8 @@ class AIDocument:
 
     def parse_numbers(self, result: dict, locale: str):
         """Parse the numbers in the result of the analysis."""
-        for idx, document in enumerate(result.get('documents')):
-            fields = document.get('fields', {})
+        for idx, page in enumerate(result.get('pages')):
+            fields = page.get('fields', {})
             for field_name, field_data in fields.items():
                 value_type = field_data.get('value_type')
                 if value_type == 'list':
@@ -91,8 +91,8 @@ class AIDocument:
 
     def parse_dates(self, result: dict):
         """Processes the dates in the result of the analysis."""
-        for idx, document in enumerate(result.get('documents')):
-            fields = document.get('fields', {})
+        for idx, page in enumerate(result.get('pages')):
+            fields = page.get('fields', {})
             for field_name, field_data in fields.items():
                 value_type = field_data.get('value_type')
                 if value_type == 'list':
@@ -112,8 +112,8 @@ class AIDocument:
     def extract_kv_pairs(self, result: dict):
         """Extract only key-value pairs from analyze_document() result"""
         kv_pairs = {}
-        for document in result.get('documents'):
-            fields = document.get('fields', {})
+        for page in result.get('pages'):
+            fields = page.get('fields', {})
             for field_name, field_data in fields.items():
                 value_type = field_data.get('value_type')
                 value = field_data.get('value')
