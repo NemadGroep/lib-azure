@@ -11,7 +11,7 @@ jobs:
         with:
           python-version: '3.x'
       - run: pip install poetry
+      - run: poetry install
       - env:
           RESULT: ${{ secrets.RESULT }}
-        run: |
-          poetry run pytest
+        run: poetry run pytest
