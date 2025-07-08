@@ -11,6 +11,10 @@ class FormRecognizer:
     def __init__(self, endpoint: str, key: str, dateformat: str ='%Y%m%d'):
         self.client = DocumentAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
         self.dateformat = dateformat
+    
+    def __del__(self):
+        if self.client:
+            self.client.close()
 
     def analyze_document(self, model_id: str, document: bytes):
         """Calls begin_analyze_document() with specified model on document"""
