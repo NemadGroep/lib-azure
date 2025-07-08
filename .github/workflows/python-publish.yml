@@ -6,11 +6,13 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Upload Python Package
+name: upload python packages
 
 on:
-  release:
-    types: [released]
+  workflow_run:
+    workflows: ["release"]
+    types:
+      - completed
 
 permissions:
   contents: read
