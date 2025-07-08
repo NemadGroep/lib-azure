@@ -1,6 +1,8 @@
 import logging
 from decimal import Decimal
 from dateparser import parse
+from lib_invoice import Invoice
+from lib_utilys import read_json
 from babel.numbers import parse_decimal
 from azure.core.credentials import AzureKeyCredential
 from azure.ai.formrecognizer import DocumentAnalysisClient, DocumentField
@@ -15,16 +17,21 @@ class FormRecognizer:
     def __del__(self):
         if self.client:
             self.client.close()
-
-    def analyze_document(self, model_id: str, document: bytes) -> dict:
-        """Calls begin_analyze_document() with specified model on document"""
+            
+    def analyze_document(self, modelmap_path: str, invoice: Invoice) -> dict:
+        """Analyzes the invoice using Azure Form Recognizer."""
         try:
-            poller = self.client.begin_analyze_document(model_id=model_id, document=document)
-            result = poller.result().to_dict()
+            model_map = read_json(modelmap_path)
+            model_id = model_map.get(invoice.business, {}).get('model_id')
+            poller = self.client.begin_analyze_document(model_id, invoice.pdf)
+            result = poller.result()
+            result = result.to_dict()
+            result['locale'] = model_map.get(invoice.business, {}).get('locale')
+            result['Creditor_number'] = model_map.get(invoice.business, {}).get('Creditor_number')
+            result['Creditor_international_location_number'] = model_map.get(invoice.business, {}).get('Creditor_international_location_number')
             return result
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to analyze document with %s", model_id)
-
 
     def print_result(self, result: dict):
         """Print the result of analyze_document in readable format"""
@@ -63,7 +70,7 @@ class FormRecognizer:
                     print(f"  Bounding Regions: {bounding_regions}")
                     print(f"  Spans: {spans}")
                     print(f"  Confidence: {confidence}")
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to print result")
                     
 
@@ -103,7 +110,7 @@ class FormRecognizer:
                                 value = '-' + value.replace('-', '')
                             result['pages'][idx]['fields'][field_name]['value'] = int(value)
             return result
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to parse numbers in the result")
             return result
 
@@ -127,7 +134,7 @@ class FormRecognizer:
                     if value_type == 'date' and value is not None:
                         result['pages'][idx]['fields'][field_name]['value'] = parse(value).strftime(self.dateformat)
             return result
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to parse dates in the result")
             return result
 
@@ -149,7 +156,7 @@ class FormRecognizer:
                                 nested_value = nested_field_data.get('value')
                                 kv_pairs[field_name][idx][nested_field_name] = nested_value
             return kv_pairs
-        except Exception as e:
+        except Exception:
             logger.exception("Failed to extract key-value pairs from the result")
             return {}
 
