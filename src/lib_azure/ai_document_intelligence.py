@@ -11,9 +11,9 @@ from azure.ai.formrecognizer import DocumentAnalysisClient, DocumentField
 logger = logging.getLogger(__name__)
 
 class FormRecognizer:
-    def __init__(self, endpoint: str, key: str, dateformat: str ='%Y%m%d'):
-        self.endpoint = os.getenv('AZURE_FORM_RECOGNIZER_ENDPOINT', endpoint)
-        self.key = os.getenv('AZURE_FORM_RECOGNIZER_KEY', key)
+    def __init__(self, dateformat: str ='%Y%m%d'):
+        self.endpoint = os.getenv('AZURE_FORM_RECOGNIZER_ENDPOINT')
+        self.key = os.getenv('AZURE_FORM_RECOGNIZER_KEY')
         self.client = DocumentAnalysisClient(endpoint=self.endpoint, credential=AzureKeyCredential(self.key))
         self.dateformat = dateformat
     
