@@ -1,3 +1,4 @@
+import os
 import logging
 from decimal import Decimal
 from dateparser import parse
@@ -11,7 +12,9 @@ logger = logging.getLogger(__name__)
 
 class FormRecognizer:
     def __init__(self, endpoint: str, key: str, dateformat: str ='%Y%m%d'):
-        self.client = DocumentAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+        self.endpoint = os.getenv('AZURE_FORM_RECOGNIZER_ENDPOINT', endpoint)
+        self.key = os.getenv('AZURE_FORM_RECOGNIZER_KEY', key)
+        self.client = DocumentAnalysisClient(endpoint=self.endpoint, credential=AzureKeyCredential(self.key))
         self.dateformat = dateformat
     
     def __del__(self):
