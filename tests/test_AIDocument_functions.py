@@ -4,6 +4,7 @@ import pytest
 
 from decimal import Decimal
 from lib_azure.AIDocument import AIDocument
+
 @pytest.fixture
 def result():
     result = os.getenv("RESULT")

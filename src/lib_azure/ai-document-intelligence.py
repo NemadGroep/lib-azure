@@ -5,7 +5,7 @@ from dateparser import parse
 from decimal import Decimal
 
 
-class AIDocument:
+class FormRecognizer:
     def __init__(self, endpoint: str, key: str, dateformat: str ='%Y%m%d'):
         self.client = DocumentAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
         self.dateformat = dateformat
