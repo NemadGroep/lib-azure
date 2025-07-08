@@ -3,7 +3,7 @@ import json
 import pytest
 
 from decimal import Decimal
-from lib_azure.AIDocument import AIDocument
+from lib_azure.ai_document_intelligence import FormRecognizer
 
 @pytest.fixture
 def result():
@@ -20,17 +20,17 @@ def locale():
     return "de_DE"
 
 @pytest.fixture
-def aidoc():
-    return AIDocument(endpoint="local-test", key="local-test")
+def form():
+    return FormRecognizer(endpoint="local-test", key="local-test")
     
-def test_print_result(aidoc, result):
-    aidoc.print_result(result)
+def test_print_result(form, result):
+    form.print_result(result)
 
-def test_processing_pipe(aidoc, result, locale):
-    result_w_numbers = aidoc.parse_numbers(result, locale)
-    result_w_numbers_n_dates = aidoc.parse_dates(result_w_numbers)
+def test_processing_pipe(form, result, locale):
+    result_w_numbers = form.parse_numbers(result, locale)
+    result_w_numbers_n_dates = form.parse_dates(result_w_numbers)
 
-    kv_pairs = aidoc.extract_kv_pairs(result_w_numbers_n_dates)
+    kv_pairs = form.extract_kv_pairs(result_w_numbers_n_dates)
     assert isinstance(kv_pairs, dict)
 
     date = kv_pairs.get("Invoice_date")
