@@ -16,7 +16,7 @@ class FormRecognizer:
         if self.client:
             self.client.close()
 
-    def analyze_document(self, model_id: str, document: bytes):
+    def analyze_document(self, model_id: str, document: bytes) -> dict:
         """Calls begin_analyze_document() with specified model on document"""
         try:
             poller = self.client.begin_analyze_document(model_id=model_id, document=document)
@@ -67,7 +67,7 @@ class FormRecognizer:
             logger.exception("Failed to print result")
                     
 
-    def parse_numbers(self, result: dict, locale: str):
+    def parse_numbers(self, result: dict, locale: str) -> dict:
         """Parse the numbers in the result of the analysis."""
         try:
             for idx, page in enumerate(result.get('pages')):
@@ -107,7 +107,7 @@ class FormRecognizer:
             logger.exception("Failed to parse numbers in the result")
             return result
 
-    def parse_dates(self, result: dict):
+    def parse_dates(self, result: dict) -> dict:
         """Processes the dates in the result of the analysis."""
         try:
             for idx, page in enumerate(result.get('pages')):
@@ -131,7 +131,7 @@ class FormRecognizer:
             logger.exception("Failed to parse dates in the result")
             return result
 
-    def extract_kv_pairs(self, result: dict):
+    def extract_kv_pairs(self, result: dict) -> dict:
         """Extract only key-value pairs from analyze_document() result"""
         try:
             kv_pairs = {}
