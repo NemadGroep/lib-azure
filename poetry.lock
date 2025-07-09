@@ -276,14 +276,14 @@ files = [
 
 [[package]]
 name = "lib-invoice"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "lib_invoice-0.1.1-py3-none-any.whl", hash = "sha256:8d5a250993ec70cfb4682dbcdc238b86a6b3fb550cc5a832e3839267ec94f547"},
-    {file = "lib_invoice-0.1.1.tar.gz", hash = "sha256:1f00a7a73d26f75e81f65a33e4fb572fd1dd6560a5eed6e4b5dfbed58f1365e3"},
+    {file = "lib_invoice-0.1.2-py3-none-any.whl", hash = "sha256:fda656d4fbb81869fc413e2eab9af95fcedffbaac47e69ae1ccb765f515579e2"},
+    {file = "lib_invoice-0.1.2.tar.gz", hash = "sha256:92a9d78470e8e98081b5ada700c7a2ac2b5449906b6430b9de4c935a34531f56"},
 ]
 
 [package.dependencies]
