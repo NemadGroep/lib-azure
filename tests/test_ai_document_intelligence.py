@@ -1,7 +1,6 @@
 import os
 import json
 import pytest
-
 from decimal import Decimal
 from lib_azure.ai_document_intelligence import FormRecognizer
 
