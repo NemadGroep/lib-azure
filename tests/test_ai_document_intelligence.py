@@ -20,7 +20,7 @@ def locale():
 
 @pytest.fixture
 def form():
-    return FormRecognizer(endpoint="local-test", key="local-test")
+    return FormRecognizer()
     
 def test_print_result(form, result):
     form.print_result(result)
