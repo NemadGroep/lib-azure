@@ -18,7 +18,7 @@ class FormRecognizer:
         self.dateformat = dateformat
     
     def __del__(self):
-        if self.client:
+        if hasattr(self, 'client') and self.client:
             self.client.close()
             
     def analyze_document(self, modelmap_path: str, invoice: Invoice) -> dict:
