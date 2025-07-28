@@ -83,6 +83,8 @@ class FormRecognizer:
         for idx, page in enumerate(result.get('pages')):
             fields = page.get('fields', {})
             for field_name, field_data in fields.items():
+                logger.debug(f"field name: {field_name}")
+                logger.debug(f"field value before processing: {field_data}")
                 value_type = field_data.get('value_type')
                 if value_type == 'list':
                     value = field_data.get('value')
@@ -112,6 +114,7 @@ class FormRecognizer:
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
                         result['pages'][idx]['fields'][field_name]['value'] = int(value)
+                logger.debug(f"field value after processing {field_data}")
         return result
 
     def parse_dates(self, result: dict) -> dict:
@@ -152,6 +155,7 @@ class FormRecognizer:
                         for nested_field_name, nested_field_data in item_line.get('value', {}).items():
                             nested_value = nested_field_data.get('value')
                             kv_pairs[field_name][idx][nested_field_name] = nested_value
+        logging.warning(f"tax percent: {kv_pairs['Tax_percent']}")
         return kv_pairs
 
 
