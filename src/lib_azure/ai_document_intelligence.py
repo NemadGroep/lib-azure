@@ -1,5 +1,6 @@
 import os
 import logging
+from pathlib import Path
 from decimal import Decimal
 from dateparser import parse
 from lib_invoice import Invoice
@@ -114,7 +115,7 @@ class FormRecognizer:
                         result['documents'][idx]['fields'][field_name]['value'] = int(value)
         return result
 
-    def parse_dates(self, result: dict) -> dict:
+    def parse_dates(self, result: dict, datefmt_path: Path) -> dict:
         """Processes the dates in the result of the analysis."""
         for idx, document in enumerate(result.get('documents')):
             fields = document.get('fields', {})
@@ -131,7 +132,7 @@ class FormRecognizer:
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
-                    result['documents'][idx]['fields'][field_name]['value'] = parse(value).strftime(self.dateformat)
+                    result['documents'][idx]['fields'][field_name]['value'] = parse(value, read_json(datefmt_path)).strftime(self.dateformat)
         return result
     
     def extract_kv_pairs(self, result: dict) -> dict:
