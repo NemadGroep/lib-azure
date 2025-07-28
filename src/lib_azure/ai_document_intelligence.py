@@ -39,8 +39,8 @@ class FormRecognizer:
     def print_result(self, result: dict):
         """Print the result of analyze_document in readable format"""
         try:
-            for page in result.get('pages'):
-                fields = page.get('fields', {})
+            for document in result.get('documents'):
+                fields = document.get('fields', {})
                 for field_name, field_data in fields.items():
                     value_type = field_data.get('value_type')
                     value = field_data.get('value')
@@ -80,11 +80,9 @@ class FormRecognizer:
     def parse_numbers(self, result: dict) -> dict:
         """Parse the numbers in the result of the analysis."""
         locale = result.get('locale')
-        for idx, page in enumerate(result.get('pages')):
-            fields = page.get('fields', {})
+        for idx, document in enumerate(result.get('documents')):
+            fields = document.get('fields', {})
             for field_name, field_data in fields.items():
-                logger.debug(f"field name: {field_name}")
-                logger.debug(f"field value before processing: {field_data}")
                 value_type = field_data.get('value_type')
                 if value_type == 'list':
                     value = field_data.get('value')
@@ -97,11 +95,11 @@ class FormRecognizer:
                                 if value.find('-') != 0 and value.find('-') != -1:
                                     value = '-' + value.replace('-', '')
                                 value = parse_decimal(value, locale=locale)
-                                result['pages'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
+                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
                             elif value_type == 'integer':
                                 if value.find('-') != 0 and value.find('-') != -1:
                                     value = '-' + value.replace('-', '')
-                                result['pages'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
+                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
                     continue
                 if field_data.get('content') is not None: 
                     value = field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('():', '').replace('hoogtarief,', '21')
@@ -109,18 +107,17 @@ class FormRecognizer:
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
                         value = parse_decimal(value, locale=locale)
-                        result['pages'][idx]['fields'][field_name]['value']  = Decimal(value)
+                        result['documents'][idx]['fields'][field_name]['value']  = Decimal(value)
                     elif value_type == 'integer':
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
-                        result['pages'][idx]['fields'][field_name]['value'] = int(value)
-                logger.debug(f"field value after processing {field_data}")
+                        result['documents'][idx]['fields'][field_name]['value'] = int(value)
         return result
 
     def parse_dates(self, result: dict) -> dict:
         """Processes the dates in the result of the analysis."""
-        for idx, page in enumerate(result.get('pages')):
-            fields = page.get('fields', {})
+        for idx, document in enumerate(result.get('documents')):
+            fields = document.get('fields', {})
             for field_name, field_data in fields.items():
                 value_type = field_data.get('value_type')
                 if value_type == 'list':
@@ -130,11 +127,11 @@ class FormRecognizer:
                             value_type = nested_field_data.get('value_type')
                             value = nested_field_data.get('content')
                             if value_type == 'date':
-                                result['pages'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
+                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
-                    result['pages'][idx]['fields'][field_name]['value'] = parse(value).strftime(self.dateformat)
+                    result['documents'][idx]['fields'][field_name]['value'] = parse(value).strftime(self.dateformat)
         return result
     
     def extract_kv_pairs(self, result: dict) -> dict:
@@ -155,7 +152,6 @@ class FormRecognizer:
                         for nested_field_name, nested_field_data in item_line.get('value', {}).items():
                             nested_value = nested_field_data.get('value')
                             kv_pairs[field_name][idx][nested_field_name] = nested_value
-        logging.warning(f"tax percent: {kv_pairs['Tax_percent']}")
         return kv_pairs
 
 
