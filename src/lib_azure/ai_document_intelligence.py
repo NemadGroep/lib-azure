@@ -115,8 +115,9 @@ class FormRecognizer:
                         result['documents'][idx]['fields'][field_name]['value'] = int(value)
         return result
 
-    def parse_dates(self, result: dict, datefmt_path: Path) -> dict:
+    def parse_dates(self, result: dict, parsefmt_path: Path) -> dict:
         """Processes the dates in the result of the analysis."""
+        parse_formats = read_json(parsefmt_path).get('formats')
         for idx, document in enumerate(result.get('documents')):
             fields = document.get('fields', {})
             for field_name, field_data in fields.items():
@@ -132,7 +133,7 @@ class FormRecognizer:
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
-                    result['documents'][idx]['fields'][field_name]['value'] = parse(value, read_json(datefmt_path)).strftime(self.dateformat)
+                    result['documents'][idx]['fields'][field_name]['value'] = parse(value, parse_formats).strftime(self.dateformat)
         return result
     
     def extract_kv_pairs(self, result: dict) -> dict:
