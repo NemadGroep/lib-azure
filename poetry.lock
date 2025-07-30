@@ -290,6 +290,18 @@ files = [
 lib-utilys = ">=0.1.3,<0.2.0"
 
 [[package]]
+name = "lib-ordrsp"
+version = "0.0.2"
+description = ""
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "lib_ordrsp-0.0.2-py3-none-any.whl", hash = "sha256:a008a473251467c16f980eb3e901d1f7b473750c7ca3dd647a5324de98bab6af"},
+    {file = "lib_ordrsp-0.0.2.tar.gz", hash = "sha256:3db3723f48f1fef4b5e7cfce6180afdac5cf9dc304b78eaf69f19de3942aa8a3"},
+]
+
+[[package]]
 name = "lib-utilys"
 version = "0.1.4"
 description = ""
@@ -699,4 +711,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "4e25f5ac73fef2ce10f94a8d7eba4867bfc8eba0c9da0a2631acef98b0e78f03"
+content-hash = "5bae53ba3d5732b03fbdf04d6b557b5b93b705b2cb39cdd9353e98b2646ce7a1"

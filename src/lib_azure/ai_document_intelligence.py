@@ -3,6 +3,7 @@ import logging
 from pathlib import Path
 from decimal import Decimal
 from dateparser import parse
+from lib_ordrsp import OrderRsp
 from lib_invoice import Invoice
 from lib_utilys import read_json
 from babel.numbers import parse_decimal
@@ -22,17 +23,17 @@ class FormRecognizer:
         if hasattr(self, 'client') and self.client:
             self.client.close()
             
-    def analyze_document(self, modelmap_path: str, invoice: Invoice) -> dict:
+    def analyze_document(self, modelmap_path: str, document: Invoice | OrderRsp) -> dict:
         """Analyzes the invoice using Azure Form Recognizer."""
         try:
             model_map = read_json(modelmap_path)
-            model_id = model_map.get(invoice.business, {}).get('model_id')
-            poller = self.client.begin_analyze_document(model_id, invoice.pdf)
+            model_id = model_map.get(document.business, {}).get('model_id')
+            poller = self.client.begin_analyze_document(model_id, document.pdf)
             result = poller.result()
             result = result.to_dict()
-            result['locale'] = model_map.get(invoice.business, {}).get('locale')
-            result['Creditor_number'] = model_map.get(invoice.business, {}).get('Creditor_number')
-            result['Creditor_international_location_number'] = model_map.get(invoice.business, {}).get('Creditor_international_location_number')
+            result['locale'] = model_map.get(document.business, {}).get('locale')
+            result['Creditor_number'] = model_map.get(document.business, {}).get('Creditor_number')
+            result['Creditor_international_location_number'] = model_map.get(document.business, {}).get('Creditor_international_location_number')
             return result
         except Exception:
             logger.exception("Failed to analyze document with %s", model_id)
