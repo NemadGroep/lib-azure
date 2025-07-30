@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 from decimal import Decimal
 from dateparser import parse
-from lib_ordrsp import OrderRsp
 from lib_invoice import Invoice
 from lib_utilys import read_json
 from babel.numbers import parse_decimal
@@ -23,7 +22,7 @@ class FormRecognizer:
         if hasattr(self, 'client') and self.client:
             self.client.close()
             
-    def analyze_document(self, modelmap_path: str, document: Invoice | OrderRsp) -> dict:
+    def analyze_document(self, modelmap_path: str, document) -> dict:
         """Analyzes the invoice using Azure Form Recognizer."""
         try:
             model_map = read_json(modelmap_path)
