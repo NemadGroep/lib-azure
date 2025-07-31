@@ -92,15 +92,15 @@ class FormRecognizer:
                             value_type = nested_field_data.get('value_type')
                             if nested_field_data.get('content') is not None: 
                                 value = nested_field_data.get('content').replace(' ', '').replace('%', '').replace('€', '')
-                            if value_type == 'float':
-                                if value.find('-') != 0 and value.find('-') != -1:
-                                    value = '-' + value.replace('-', '')
-                                value = parse_decimal(value, locale=locale)
-                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
-                            elif value_type == 'integer':
-                                if value.find('-') != 0 and value.find('-') != -1:
-                                    value = '-' + value.replace('-', '')
-                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
+                                if value_type == 'float':
+                                    if value.find('-') != 0 and value.find('-') != -1:
+                                        value = '-' + value.replace('-', '')
+                                    value = parse_decimal(value, locale=locale)
+                                    result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
+                                elif value_type == 'integer':
+                                    if value.find('-') != 0 and value.find('-') != -1:
+                                        value = '-' + value.replace('-', '')
+                                    result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
                     continue
                 if field_data.get('content') is not None: 
                     value = field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('():', '').replace('hoogtarief,', '21')
