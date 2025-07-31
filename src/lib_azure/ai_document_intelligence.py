@@ -127,9 +127,10 @@ class FormRecognizer:
                     for idxx, item_line in enumerate(value):
                         for nested_field_name, nested_field_data in item_line.get('value', {}).items():
                             value_type = nested_field_data.get('value_type')
-                            value = nested_field_data.get('content')
-                            if value_type == 'date':
-                                result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
+                            if nested_field_data.get('content') is not None:
+                                value = nested_field_data.get('content')
+                                if value_type == 'date':
+                                    result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
