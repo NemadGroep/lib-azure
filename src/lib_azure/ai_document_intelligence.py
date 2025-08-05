@@ -1,6 +1,7 @@
 import os
 import logging
 from pathlib import Path
+from datetime import date
 from decimal import Decimal
 from dateparser import parse
 from lib_invoice import Invoice
@@ -130,11 +131,27 @@ class FormRecognizer:
                             if nested_field_data.get('content') is not None:
                                 value = nested_field_data.get('content')
                                 if value_type == 'date':
-                                    result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parse(value).strftime(self.dateformat)
+                                    parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
+                                    if parsed_value:
+                                        result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parsed_value.strftime(self.dateformat)
+                                    elif len(value.split('-')) == 2:
+                                        parsed_value = date.fromisocalendar(int(value.split('-')[1]), int(value.split('-')[0]), 3)
+                                        result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parsed_value.strftime(self.dateformat)
+                                    else:
+                                        logger.warning("Failed to parse date: %s", value)
+                                        result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = None
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
-                    result['documents'][idx]['fields'][field_name]['value'] = parse(value, parse_formats).strftime(self.dateformat)
+                    parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
+                    if parsed_value:
+                        result['documents'][idx]['fields'][field_name]['value'] = parsed_value.strftime(self.dateformat)
+                    elif len(value.split('-')) == 2:
+                        parsed_value = date.fromisocalendar(int(value.split('-')[1]), int(value.split('-')[0]), 3)
+                        result['documents'][idx]['fields'][field_name]['value'] = parsed_value.strftime(self.dateformat)
+                    else:
+                        logger.warning("Failed to parse date: %s", value)
+                        result['documents'][idx]['fields'][field_name]['value'] = None
         return result
     
     def extract_kv_pairs(self, result: dict) -> dict:
