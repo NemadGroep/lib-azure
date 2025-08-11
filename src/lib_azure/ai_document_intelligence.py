@@ -112,7 +112,7 @@ class FormRecognizer:
                         result['documents'][idx]['fields'][field_name]['value']  = Decimal(value)
                     elif value_type == 'integer':
                         if value.find('-') != 0 and value.find('-') != -1:
-                            value = '-' + value.replace('-', '')
+                            value = '-' + value.replace('-', '').replace(',', '')
                         result['documents'][idx]['fields'][field_name]['value'] = int(value)
         return result
 
