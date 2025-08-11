@@ -132,6 +132,7 @@ class FormRecognizer:
                             if nested_field_data.get('content') is not None:
                                 value = nested_field_data.get('content')
                                 if value_type == 'date':
+                                    value = value.replace(',', '')
                                     parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
                                     if parsed_value:
                                         result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parsed_value.strftime(self.dateformat)
@@ -144,6 +145,7 @@ class FormRecognizer:
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
+                    value = value.replace(',', '')
                     parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
                     if parsed_value:
                         result['documents'][idx]['fields'][field_name]['value'] = parsed_value.strftime(self.dateformat)
