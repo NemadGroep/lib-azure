@@ -92,7 +92,7 @@ class FormRecognizer:
                         for nested_field_name, nested_field_data in item_line.get('value', {}).items():
                             value_type = nested_field_data.get('value_type')
                             if nested_field_data.get('content') is not None: 
-                                value = nested_field_data.get('content').replace(' ', '').replace('%', '').replace('€', '')
+                                value = nested_field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('EUR', '')
                                 if value_type == 'float':
                                     if value.find('-') != 0 and value.find('-') != -1:
                                         value = '-' + value.replace('-', '')
@@ -104,7 +104,7 @@ class FormRecognizer:
                                     result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
                     continue
                 if field_data.get('content') is not None: 
-                    value = field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('():', '').replace('hoogtarief,', '21')
+                    value = field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('():', '').replace('hoogtarief,', '21').replace('EUR', '')
                     if value_type == 'float':
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
