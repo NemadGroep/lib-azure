@@ -226,7 +226,7 @@ class FormRecognizer:
                         value = parse_decimal(value, locale=locale)
                         result['documents'][idx]['fields'][field_name]['value']  = Decimal(value)
                     elif value_type == 'integer':
-                        value = value.replace(',', '').replace('Prijs/','')
+                        value = value.replace(',', '').replace('Prijs/','').replace('No.', '').replace('NMo.', '')
                         if value.find('-') != 0 and value.find('-') != -1:
                             value = '-' + value.replace('-', '')
                         result['documents'][idx]['fields'][field_name]['value'] = int(value)
@@ -260,7 +260,7 @@ class FormRecognizer:
                     continue
                 value = field_data.get('content')
                 if value_type == 'date' and value is not None:
-                    value = value.replace(',', '')
+                    value = value.replace(',', '').replace('/OM', '').replace('-kn', '')
                     parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
                     if parsed_value:
                         result['documents'][idx]['fields'][field_name]['value'] = parsed_value.strftime(self.dateformat)
