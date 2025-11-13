@@ -95,7 +95,7 @@ def parse_dates(result: dict, parsefmt_path: Path) -> dict:
                 continue
             value = field_data.get('content')
             if value_type == 'date' and value is not None:
-                value = value.replace(',', '')
+                value = value.replace(',', '').replace('leverdatum:', '')
                 parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
                 if parsed_value:
                     result['documents'][idx]['fields'][field_name]['value'] = parsed_value.strftime('%Y%m%d')
