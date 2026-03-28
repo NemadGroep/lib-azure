@@ -107,6 +107,47 @@ def parse_dates(result: dict, parsefmt_path: Path) -> dict:
                     result['documents'][idx]['fields'][field_name]['value'] = None
     return result
 
+def print_analysis_result(result: dict):
+    """Print the result of analyze_document in readable format"""
+    try:
+        for document in result.get('documents'):
+            fields = document.get('fields', {})
+            for field_name, field_data in fields.items():
+                value_type = field_data.get('value_type')
+                value = field_data.get('value')
+                if value_type == 'list':
+                    for item in value:
+                        value_type = item.get('value_type')
+                        value = item.get('value')
+                        for field_name, field_data in value.items():
+                            value_type = field_data.get('value_type')
+                            value = field_data.get('value')
+                            content = field_data.get('content')
+                            bounding_regions = field_data.get('bounding_regions', [])
+                            spans = field_data.get('spans', [])
+                            confidence = field_data.get('confidence')
+                            print(f"Field Name: {field_name}")
+                            print(f"  Value Type: {value_type}")
+                            print(f"  Value: {value}")
+                            print(f"  Content: {content}")
+                            print(f"  Bounding Regions: {bounding_regions}")
+                            print(f"  Spans: {spans}")
+                            print(f"  Confidence: {confidence}")
+                content = field_data.get('content')
+                bounding_regions = field_data.get('bounding_regions', [])
+                spans = field_data.get('spans', [])
+                confidence = field_data.get('confidence')
+                print(f"Field Name: {field_name}")
+                print(f"  Value Type: {value_type}")
+                print(f"  Value: {value}")
+                print(f"  Content: {content}")
+                print(f"  Bounding Regions: {bounding_regions}")
+                print(f"  Spans: {spans}")
+                print(f"  Confidence: {confidence}")
+    except Exception:
+        logger.exception("Failed to print result")
+                    
+
 def extract_kv_pairs(result: dict) -> dict:
     """Extract only key-value pairs from analyze_document() result"""
     kv_pairs = {}
