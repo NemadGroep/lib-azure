@@ -1,4 +1,5 @@
 import os
+import re
 import logging
 from pathlib import Path
 from datetime import date
@@ -51,6 +52,7 @@ def parse_numbers(result: dict) -> dict:
                             elif value_type == 'integer':
                                 if value.find('-') != 0 and value.find('-') != -1:
                                     value = '-' + value.replace('-', '')
+                                value = re.sub(r'[^\d-]', '', value)
                                 result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = int(value)
                 continue
             if field_data.get('content') is not None: 
@@ -64,6 +66,7 @@ def parse_numbers(result: dict) -> dict:
                     value = value.replace(',', '').replace('Prijs/','')
                     if value.find('-') != 0 and value.find('-') != -1:
                         value = '-' + value.replace('-', '')
+                    value = re.sub(r'[^\d-]', '', value)
                     result['documents'][idx]['fields'][field_name]['value'] = int(value)
     return result
 
