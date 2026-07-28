@@ -45,8 +45,10 @@ def parse_numbers(result: dict) -> dict:
                         if nested_field_data.get('content') is not None: 
                             value = nested_field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('EUR', '')
                             if value_type == 'float':
+                                value = value.replace(',-', '')
                                 if value.find('-') != 0 and value.find('-') != -1:
                                     value = '-' + value.replace('-', '')
+                                value = re.sub(r'[^\d\.,-]', '', value)
                                 value = parse_decimal(value, locale=locale)
                                 result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value']  = Decimal(value)
                             elif value_type == 'integer':
@@ -58,9 +60,11 @@ def parse_numbers(result: dict) -> dict:
             if field_data.get('content') is not None: 
                 value = field_data.get('content').replace(' ', '').replace('%', '').replace('€', '').replace('():', '').replace('hoogtarief,', '21').replace('EUR', '')
                 if value_type == 'float':
+                    value = value.replace(',-', '')
                     if value.find('-') != 0 and value.find('-') != -1:
                         value = '-' + value.replace('-', '')
                     value = parse_decimal(value, locale=locale)
+                    value = re.sub(r'[^\d\.,-]', '', value)
                     result['documents'][idx]['fields'][field_name]['value']  = Decimal(value)
                 elif value_type == 'integer':
                     value = value.replace(',', '').replace('Prijs/','')
