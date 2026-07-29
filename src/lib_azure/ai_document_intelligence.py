@@ -63,8 +63,8 @@ def parse_numbers(result: dict) -> dict:
                     value = value.replace(',-', '')
                     if value.find('-') != 0 and value.find('-') != -1:
                         value = '-' + value.replace('-', '')
-                    value = parse_decimal(value, locale=locale)
                     value = re.sub(r'[^\d\.,-]', '', value)
+                    value = parse_decimal(value, locale=locale)
                     result['documents'][idx]['fields'][field_name]['value']  = Decimal(value)
                 elif value_type == 'integer':
                     value = value.replace(',', '').replace('Prijs/','')
