@@ -89,7 +89,7 @@ def parse_dates(result: dict, parsefmt_path: Path) -> dict:
                         if nested_field_data.get('content') is not None:
                             value = nested_field_data.get('content')
                             if value_type == 'date':
-                                value = value.replace(',', '').replace('leverdatum:', '')
+                                value = value.replace(',', '').replace('leverdatum:', '').replace(':', '')
                                 parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
                                 if parsed_value:
                                     result['documents'][idx]['fields'][field_name]['value'][idxx]['value'][nested_field_name]['value'] = parsed_value.strftime('%Y%m%d')
@@ -102,7 +102,7 @@ def parse_dates(result: dict, parsefmt_path: Path) -> dict:
                 continue
             value = field_data.get('content')
             if value_type == 'date' and value is not None:
-                value = value.replace(',', '').replace('leverdatum:', '')
+                value = value.replace(',', '').replace('leverdatum:', '').replace(':', '')
                 parsed_value = parse(value, parse_formats, settings={'STRICT_PARSING': True})
                 if parsed_value:
                     result['documents'][idx]['fields'][field_name]['value'] = parsed_value.strftime('%Y%m%d')
